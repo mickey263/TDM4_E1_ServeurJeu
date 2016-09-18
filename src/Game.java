@@ -10,9 +10,9 @@ public class Game {
 		// TODO Auto-generated method stub
 		String ipSrv	= args[0];
 		int portSrv 	= Integer.valueOf(args[1]);
-		int portClient 	= Integer.valueOf(args[2]);
+		//int portClient 	= Integer.valueOf(args[2]);
 		
 		clientUDP = new ClientUDP();
-		clientUDP.execute(ipSrv,portSrv,portClient);			
+		clientUDP.execute(ipSrv,portSrv);			
 	}
 }

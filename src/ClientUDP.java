@@ -20,7 +20,7 @@ public class ClientUDP
 	 * et attend la reponse 
 	 * 
 	 */
-	public void execute(String IPSrv, int PortSrc, int PortClient) throws IOException
+	public void execute(String IPSrv, int PortSrc) throws IOException
 	{
 		//
 		System.out.println("Demarrage du client ...");
@@ -31,7 +31,7 @@ public class ClientUDP
 		dpE = new DatagramPacket(bufE, bufE.length, adrDest);
 		socket = new DatagramSocket();
 		socket.send(dpE);
-		System.out.println("Message envoy�");
+		System.out.println("Message envoy�");
 		
 		// Attente de la reponse 
 		byte[] bufR = new byte[2048];
@@ -69,6 +69,39 @@ public class ClientUDP
 		System.out.println("id Question "+ message.substring(iSQid, iEQid));
 		System.out.println("Valeur A "+ message.substring(iSNb1, iENb1));
 		System.out.println("Valeur B "+ message.substring(iSNb2, iENb2));
+		
+		String QID = message.substring(iSQid, iEQid);
+		int A = Integer.valueOf(message.substring(iSNb1, iENb1));
+		int B = Integer.valueOf(message.substring(iSNb2, iENb2));
+		int resultat = A+B;
+		
+		// Creation et envoi du message
+		byte[] bufE2 = new String("R" + QID + ':' + resultat).getBytes();
+		dpE = new DatagramPacket(bufE2, bufE2.length, adrDest);
+		socket = new DatagramSocket();
+		socket.send(dpE);
+		System.out.println("Message envoyé " + "R" + QID + ':' + resultat);
+	
+		// Attente de la reponse 
+		byte[] bufR2 = new byte[2048];
+		dpR = new DatagramPacket(bufR2, bufR2.length);
+		socket.receive(dpR);
+		String message1 = new String(bufR2, dpR.getOffset(), dpR.getLength());
+		System.out.println("Reponse recue = "+message1);
+		
+		// Creation et envoi du message
+		byte[] bufE3 = new String("SCORE").getBytes();
+		dpE = new DatagramPacket(bufE3, bufE3.length, adrDest);
+		socket = new DatagramSocket();
+		socket.send(dpE);
+		System.out.println("Message envoyé");	
+		
+		// Attente de la reponse 
+		byte[] bufR3 = new byte[2048];
+		dpR = new DatagramPacket(bufR3, bufR3.length);
+		socket.receive(dpR);
+		String message2 = new String(bufR3, dpR.getOffset(), dpR.getLength());
+		System.out.println("Reponse recue = "+message2);
 		
 		// Fermeture de la socket
 		socket.close();
